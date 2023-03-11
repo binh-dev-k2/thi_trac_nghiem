@@ -17,13 +17,16 @@ class CreateExamsTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->integer('time');
-            $table->integer('count_participants')->unsigned();
+            $table->integer('time')->nullable();
+            $table->integer('count_participants')->unsigned()->nullable();
+            $table->integer('count_participanted')->unsigned()->nullable();
+            $table->dateTime('start_time')->nullable();
+            $table->dateTime('stop_time')->nullable();
             $table->string('name', 100);
-            $table->integer('question_per_exams')->unsigned();
+            $table->integer('question_per_exams')->unsigned()->nullable();
             $table->boolean('is_see_result')->nullable()->default(false);
-            $table->integer('status')->unsigned();
-            $table->json('matrix')->nullable();
+            $table->integer('status')->unsigned()->nullable();
+            $table->json('matrix')->nullable()->nullable();
             $table->timestamps();
         });
     }

@@ -12,11 +12,12 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware(['auth','verified'])->namespace('App\Http\Controllers')->group(function() {
+Route::get('/', 'HomeController@index')->name('home');
+// Tạo bài thi
+Route::get('tao-bai-thi', 'ExamController@create')->name('exam.create');
+Route::post('/', 'ExamController@createStep1')->name('create_step_1');
 });
 
 Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::resource('/exam', App\Http\Controllers\ExamController::class);

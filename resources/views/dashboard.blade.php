@@ -13,6 +13,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/img/favicon.png') }}">
 
     <link rel="stylesheet" href="{{asset('assets/css/v3.0.0/line.css') }}">
+    @yield('head')
 </head>
 <body class="layout-light side-menu">
   <div class="mobile-search">
@@ -33,8 +34,10 @@
     <div class="overlay-dark-sidebar"></div>
   <div class="customizer-overlay"></div>
   @include('layouts.components.customie')
+
     <script src="{{ asset('assets/js/plugins.min.js') }}"></script>
     <script src="{{ asset('assets/js/script.min.js') }}"></script>
+    @yield('js')
 </body>
 </html>
 
