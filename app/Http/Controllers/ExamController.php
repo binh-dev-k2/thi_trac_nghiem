@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\exam;
+use App\Models\Exam;
+use Carbon\Carbon;
 
 class ExamController extends Controller
 {
@@ -18,38 +19,38 @@ class ExamController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function createStep1()
     {
         return view('exam.create');
     }
-    public function createStep1(Request $request)
+
+
+    public function storeStep1(Request $request)
     {
-       $validator = $request->insert([
-            'name' => 'required',
-            'count_participants' => 'required',
-            'datetimes' => 'required',
-           
-       ]);
-       $request->datetimes = explode("-",$request->datetimes);
-       $start_time = strtotime($request->datetimes[0]);
-       $stop_time = strtotime($request->datetimes[1]);
-       $exam = exam::create([
+        $validator = $request->validate([
+                'name' => 'required',
+                'count_participants' => 'required',
+                'datetimes' => 'required',
+        ]);
+
+        $request->datetimes = explode(" - ",$request->datetimes);
+        $start_time = $request->datetimes[0];
+        $stop_time = $request->datetimes[1];
+
+        $exam = Exam::create([
+            'user_id' => auth()->user()->id,
             'name' => $request->name,
             'count_participants' => $request->count_participants,
             'start_time' => $start_time,
             'stop_time' => $stop_time,
-       ]);
-       return view('exam.createstep2', compact('data'));
+        ]);
 
-       
+        return redirect()->route('exam.create.2')->with(['status' => 'Tạo thông tin kì thi thành công!', 'type' => 'success', 'exam' => $exam]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function createStep2()
     {
-        //
+        return view('exam.create2');
     }
 
     /**

@@ -70,19 +70,18 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="edit-profile__body">
-                                            <form action="{{ route('create_step_1') }}" method="POST">
+                                            <form action="{{ route('exam.store.1') }}" method="POST">
                                                 @csrf
                                                 <div class="row">
                                                     <div class="form-group col-sm-6">
                                                         <label for="name1">Tên kì thi</label>
-                                                        <input type="text" class="form-control" name="name"
-                                                        required
+                                                        <input type="text" class="form-control" name="name" required
                                                             id="name1" placeholder="Giữa kì, 15 phút toán">
                                                     </div>
                                                     <div class="form-group col-sm-6">
                                                         <label for="name2">Số lượng người thi</label>
-                                                        <input type="number" class="form-control" name="count_participants" required
-                                                            id="name2" placeholder="">
+                                                        <input type="number" class="form-control" name="count_participants"
+                                                            required id="name2" placeholder="">
                                                     </div>
 
                                                     <div class="form-group col-sm-12">
@@ -142,16 +141,18 @@
 @endsection
 
 @section('js')
-<script>
-    $(function() {
-      $('input[name="datetimes"]').daterangepicker({
-        timePicker: true,
-        startDate: moment().startOf('hour'),
-        endDate: moment().startOf('hour').add(32, 'hour'),
-        locale: {
-          format: 'M/DD/YYYY hh:mm A'
-        }
-      });
-    });
+    <script>
+        $(function() {
+            $('input[name="datetimes"]').daterangepicker({
+                timePicker: true,
+                showDropdowns: true,
+                startDate: moment().startOf('hour'),
+                endDate: moment().startOf('hour').add(32, 'hour'),
+                timePicker24Hour: true,
+                locale: {
+                    format: 'YYYY-MM-DD HH:mm'
+                }
+            });
+        });
     </script>
 @endsection

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class answer extends Model
+class Answer extends Model
 {
     use HasFactory;
     protected $table = 'answers';
@@ -18,10 +18,10 @@ class answer extends Model
     ];
     public function question()
     {
-        return $this->belongsTo(question::class, 'question_id', 'id');
+        return $this->belongsTo(Question::class, 'question_id', 'id');
     }
     public function answerStudentTest()
     {
-        return $this->hasMany(answer_student_test::class, 'answer_id', 'id');
+        return $this->hasMany(AnswerStudentTest::class, 'answer_id', 'id');
     }
 }

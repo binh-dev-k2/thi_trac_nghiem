@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ExamController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,9 +16,16 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth','verified'])->namespace('App\Http\Controllers')->group(function() {
 Route::get('/', 'HomeController@index')->name('home');
 // Tạo bài thi
-Route::get('tao-bai-thi', 'ExamController@create')->name('exam.create');
-Route::post('/', 'ExamController@createStep1')->name('create_step_1');
+
+Route::prefix('bai-thi')->group(function () {
+    Route::get('/tao-bai-thi/buoc-1', [ExamController::class, 'createStep1'])->name('exam.create.1');
+    Route::post('/tao-bai-thi/buoc-1', [ExamController::class, 'storeStep1'])->name('exam.store.1');
+    Route::get('/tao-bai-thi/buoc-2', [ExamController::class, 'createStep2'])->name('exam.create.2');
+    Route::post('/tao-bai-thi/buoc-2', [ExamController::class, 'storeStep2'])->name('exam.store.2');
+
+});
+
 });
 
 Auth::routes();
-Route::resource('/exam', App\Http\Controllers\ExamController::class);
+
