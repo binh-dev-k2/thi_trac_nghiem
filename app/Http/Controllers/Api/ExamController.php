@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Question;
+use App\Models\Answer;
 
 class ExamController extends Controller
 {
@@ -23,11 +25,27 @@ class ExamController extends Controller
         //
     }
 
-    public function storeStep2(Request $request)
+    public function storeStep2(Request $request, $id)
     {
         $data = json_decode($request->getContent(), true);
 
-        return response()->json($data, 200);
+        foreach ($data as $ques) {
+            $question = Question::create([
+                'exam_id' => $id,
+                'name' => $ques['question'],
+                'level' => $ques['type']
+            ]);
+
+            foreach ($ques['answers'] as $key => $answer) {
+                Answer::create([
+                    'question_id' => $question->id,
+                    'content' => $answer,
+                    'status' => $key + 1 == $ques['correct-answer'] ? true : false
+                ]);
+            }
+        }
+
+        return response()->json(['status' => 'Xong', 'type' => 'success', 'redirect' => route('home')], 200);
     }
 
     /**

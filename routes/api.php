@@ -19,4 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/bai-thi/tao-bai-thi/buoc-2', [ExamController::class, 'storeStep2'])->name('api.exam.create.2');
+Route::post('/bai-thi/tao-bai-thi/{id}', [ExamController::class, 'storeStep2'])->name('api.exam.create.2');

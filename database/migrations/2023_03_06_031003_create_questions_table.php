@@ -17,7 +17,7 @@ class CreateQuestionsTable extends Migration
             $table->increments('id');
             $table->integer('exam_id')->unsigned();
             $table->foreign('exam_id')->references('id')->on('exams')->onDelete('cascade');
-            $table->text('name');
+            $table->string('name');
             $table->integer('level');
             $table->timestamps();
         });

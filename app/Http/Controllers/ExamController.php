@@ -45,12 +45,9 @@ class ExamController extends Controller
             'stop_time' => $stop_time,
         ]);
 
-        return redirect()->route('exam.create.2')->with(['status' => 'Tạo thông tin kì thi thành công!', 'type' => 'success', 'exam' => $exam]);
-    }
+        $id = $exam->id;
 
-    public function createStep2()
-    {
-        return view('exam.create2');
+        return view('exam.create2', compact('id'))->with(['status' => 'Tạo thông tin kì thi thành công!', 'type' => 'success']);
     }
 
     /**

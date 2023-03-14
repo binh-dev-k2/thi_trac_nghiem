@@ -5,47 +5,43 @@ const formElement = document.getElementById('form-create')
 const app = {
     lengthAnswers: 4,
     lengthQuestions: 3,
+    id: 0,
     submitForm: function () {
         const _this = this
 
         formElement.onsubmit = function (e) {
             e.preventDefault()
 
-            const questionsValue = document.querySelectorAll('input[name="question"]')
-            const answersValue = document.querySelectorAll('input[name="answer"]')
+            const questionsValue = document.querySelectorAll('.question-input')
+            const answersValue = document.querySelectorAll('.answer-input')
+            const questions = document.querySelectorAll('.question')
             let x = _this.validate([questionsValue, answersValue])
+            let y = _this.validateRadio()
 
-            if (!x) {
+            if (!x || !y) {
 
             } else {
                 let values = []
-                Array.from(questionsValue).forEach((ques) => {
+                Array.from(questions).forEach((ques) => {
                     let arrAnswers = []
                     let answer = 0
-                    let type = 0
-                    const radio_type = ques.closest('.query').querySelectorAll('input[name="radio-type"]')
+                    const radio_type = ques.querySelector('.radio-difficult:checked')
+                    let type = radio_type.value
 
-                    Array.from(radio_type).forEach((e, index) => {
-                        if (e.checked) {
-                            type = index
-                        }
-                    })
-
-                    const answers = ques.closest('.query').querySelectorAll('.answer')
-                    console.log(answers);
+                    const answers = ques.querySelectorAll('.answer')
 
                     Array.from(answers).forEach((e, index) => {
-                        const answerValue = e.querySelector('input[name="answer"]').value
+                        const answerValue = e.querySelector('.answer-input').value
                         arrAnswers.push(answerValue)
 
-                        const answerRadioBtn = e.querySelector('input[name="correct-answer"]')
+                        const answerRadioBtn = e.querySelector('.correct-answer-radio')
                         if (answerRadioBtn.checked) {
-                            answer = index
+                            answer = index + 1
                         }
                     })
 
                     const obj = {
-                        'question': ques.value,
+                        'question': ques.querySelector('.question-input').value,
                         'type': type,
                         'answers': arrAnswers,
                         'correct-answer': answer
@@ -62,6 +58,9 @@ const app = {
                     },
                     data: JSON.stringify(values),
                     success: function (response) {
+                        if (response.type === 'success') {
+                            window.location.href = response.redirect;
+                        }
                         console.log(response)
                     },
                     error: function (xhr, status, error) {
@@ -112,6 +111,11 @@ const app = {
                 const addAnswerBtn = answersContainer.nextElementSibling
                 const answerTemplate = document.getElementById('answer-template');
                 const answer = answerTemplate.content.cloneNode(true);
+                const questionNode = answersContainer.parentElement.getAttribute('data-index')
+                console.log(questionNode);
+
+                answer.querySelector('input').setAttribute('name', 'correct-answer-' + questionNode)
+
                 answersContainer.appendChild(answer);
 
                 if (answersContainer.children.length >= _this.lengthAnswers) {
@@ -123,6 +127,13 @@ const app = {
         addQuestionBtn.addEventListener('click', function () {
             const questionTemplate = document.getElementById('question-template');
             const question = questionTemplate.content.cloneNode(true);
+            const dif = question.querySelectorAll('.radio-difficult');
+            const qus = question.querySelector('.question')
+            qus.dataset.index = _this.id
+
+            dif.forEach(e => {
+                e.setAttribute('name', 'difficult-' + qus.getAttribute('data-index'));
+            })
 
             questionsContainer.appendChild(question);
 
@@ -130,6 +141,7 @@ const app = {
                 addQuestionBtn.style.display = 'none';
             }
 
+            _this.id++;
             _this.renderQuestionIndex();
         });
     },
@@ -142,14 +154,52 @@ const app = {
         let countErr = 0
         elements.forEach(ev => {
             ev.forEach(e => {
-                const formMessage = e.closest('.query').querySelector('.form-message')
+                console.log(e);
+                const name = e.getAttribute('name')
+                const formMessage = e.closest(`.${name}`).querySelector('.form-message')
                 if (e.value.trim() == '') {
+                    formMessage.classList.remove('d-none')
                     formMessage.textContent = 'Vui lòng nhập dữ liệu cho phần này!'
                     countErr++
                 } else {
+                    formMessage.classList.add('d-none')
                     formMessage.textContent = ''
                 }
             })
+        })
+
+        return (countErr == 0)
+    },
+    validateRadio: function () {
+        let countErr = 0
+        questionElement = document.querySelectorAll('.question')
+        questionElement.forEach(e => {
+            const formMessageType = e.querySelector('.form-message')
+            const formMessage = e.querySelectorAll('.form-message')
+
+            const formMessageAnswer = formMessage[formMessage.length - 1]
+
+            const radioGroupType = e.querySelector('.radio-difficult:checked')
+            if (!radioGroupType) {
+                formMessageType.classList.remove('d-none')
+                formMessageType.textContent = 'Vui lòng chọn độ khó cho câu hỏi!'
+                countErr++
+            } else {
+                formMessageType.classList.add('d-none')
+                formMessageType.textContent = ''
+            }
+
+            const radioGroupAnswer = e.querySelector('.correct-answer-radio:checked')
+            if (!radioGroupAnswer) {
+                formMessageAnswer.classList.remove('d-none')
+                formMessageAnswer.textContent = 'Vui lòng thêm câu trả lời đúng!'
+                countErr++
+            } else {
+                formMessageAnswer.classList.add('d-none')
+                formMessageAnswer.textContent = ''
+            }
+
+
         })
 
         return (countErr == 0)
