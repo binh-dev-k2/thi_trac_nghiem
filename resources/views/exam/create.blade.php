@@ -12,7 +12,7 @@
                 <div class="col-lg-12">
                     <div class="shop-breadcrumb">
                         <div class="breadcrumb-main">
-                            <h4 class="text-capitalize breadcrumb-title">checkout</h4>
+                            {{-- <h4 class="text-capitalize breadcrumb-title">checkout</h4>
                             <div class="breadcrumb-action justify-content-center flex-wrap">
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
@@ -21,7 +21,7 @@
                                         <li class="breadcrumb-item active" aria-current="page">checkout</li>
                                     </ol>
                                 </nav>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -81,10 +81,14 @@
                                                     <div class="form-group col-sm-6">
                                                         <label for="name2">Số lượng người thi</label>
                                                         <input type="number" class="form-control" name="count_participants"
-                                                            required id="name2" placeholder="">
+                                                            required id="name2" placeholder="Số lượng người tham gia thi">
                                                     </div>
-
-                                                    <div class="form-group col-sm-12">
+                                                    <div class="form-group col-sm-6">
+                                                        <label for="time">Thời gian thi</label>
+                                                        <input type="number" class="form-control" name="time"
+                                                            required id="time" placeholder="Thời gian thi">
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
                                                         <label for="stop_time">Thời gian bắt đầu- kết thúc</label>
                                                         <div class="col-sm-12">
                                                             <input type="text" class="form-control" name="datetimes" />

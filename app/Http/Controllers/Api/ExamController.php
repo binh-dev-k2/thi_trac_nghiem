@@ -30,7 +30,11 @@ class ExamController extends Controller
         $data = json_decode($request->getContent(), true);
 
         foreach ($data as $ques) {
-            $question = Question::create([
+            $question = Question::firstOrCreate([
+                'exam_id' => $id,
+                'name' => $ques['question'],
+                'level' => $ques['type']
+            ],[
                 'exam_id' => $id,
                 'name' => $ques['question'],
                 'level' => $ques['type']
@@ -45,7 +49,7 @@ class ExamController extends Controller
             }
         }
 
-        return response()->json(['status' => 'Xong', 'type' => 'success', 'redirect' => route('home')], 200);
+        return response()->json(['type' => 'success', 'redirect' => route('exam.create.3', $id)], 200);
     }
 
     /**

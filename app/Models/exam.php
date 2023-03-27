@@ -30,7 +30,7 @@ class Exam extends Model
     }
     public function question()
     {
-        return $this->hasMany(question::class, 'exam_id', 'id');
+        return $this->hasMany(Question::class, 'exam_id', 'id');
     }
 
 }
