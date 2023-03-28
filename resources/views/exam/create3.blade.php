@@ -175,7 +175,7 @@
 
         inNum.forEach(e => {
             e.addEventListener('input', function() {
-                if (this.value <= 0) {
+                if (this.value < 0) {
                     this.value = 0;
                 } else if (this.value > parseInt(e.getAttribute('max'))) {
                     this.value = parseInt(e.getAttribute('max'));

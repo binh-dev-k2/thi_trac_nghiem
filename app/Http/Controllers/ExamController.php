@@ -134,11 +134,11 @@ class ExamController extends Controller
                 while (in_array($randomKey, $randomKeys)) {
                     $randomKey = array_rand($easyX);
                 }
-                $randomKeys[] = $randomKey;
+                $randomKeys[] = $easyX[$randomKey];
 
                 TestQuestion::create([
                     'test_id' => $test->id,
-                    'question_id' => $randomKey
+                    'question_id' => $easyX[$randomKey]
                 ]);
 
                 $easyY --;
@@ -149,11 +149,11 @@ class ExamController extends Controller
                 while (in_array($randomKey, $randomKeys)) {
                     $randomKey = array_rand($normalX);
                 }
-                $randomKeys[] = $randomKey;
+                $randomKeys[] = $normalX[$randomKey];
 
                 TestQuestion::create([
                     'test_id' => $test->id,
-                    'question_id' => $randomKey
+                    'question_id' => $normalX[$randomKey]
                 ]);
 
                 $normalY --;
@@ -164,11 +164,11 @@ class ExamController extends Controller
                 while (in_array($randomKey, $randomKeys)) {
                     $randomKey = array_rand($hardX);
                 }
-                $randomKeys[] = $randomKey;
+                $randomKeys[] = $hardX[$randomKey];
 
                 TestQuestion::create([
                     'test_id' => $test->id,
-                    'question_id' => $randomKey
+                    'question_id' => $hardX[$randomKey]
                 ]);
 
                 $hardY --;
