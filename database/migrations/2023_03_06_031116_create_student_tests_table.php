@@ -19,7 +19,7 @@ class CreateStudentTestsTable extends Migration
             $table->foreign('student_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('test_id')->unsigned();
             $table->foreign('test_id')->references('id')->on('tests')->onDelete('cascade');
-            $table->float('scores')->nullable();
+            $table->float('scores')->nullable()->defaultValue('-1');
             $table->timestamps();
         });
     }

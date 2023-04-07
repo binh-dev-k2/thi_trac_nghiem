@@ -18,11 +18,17 @@
                         <span class="menu-text">Danh sách bài thi</span>
                     </a>
                 </li>
+                <li class="">
+                    <a href="{{ route('exam.code') }}" class="">
+                        <span class="nav-icon uil uil-list-ul"></span>
+                        <span class="menu-text">Làm bài thi</span>
+                    </a>
+                </li>
                 <li class="menu-title mt-30">
                     <span>Quản lý bài thi</span>
                 </li>
                 <li class="">
-                    <a href="#" class="">
+                    <a href="{{ route('exam.list') }}" class="">
                         <span class="nav-icon uil uil-list-ul"></span>
                         <span class="menu-text">Danh sách kì thi</span>
                     </a>

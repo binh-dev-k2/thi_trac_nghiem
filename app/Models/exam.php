@@ -28,6 +28,10 @@ class Exam extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+    public function test()
+    {
+        return $this->hasMany(Test::class, 'exam_id', 'id');
+    }
     public function question()
     {
         return $this->hasMany(Question::class, 'exam_id', 'id');
