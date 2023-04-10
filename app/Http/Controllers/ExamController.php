@@ -140,7 +140,7 @@ class ExamController extends Controller
             while ($easyY > 0) {
                 $randomKey = array_rand($easyX);
                 while (in_array($randomKey, $randomKeys)) {
-                    $randomKey = array_rand($easyX);
+                    $easyX[$randomKey] = array_rand($easyX);
                 }
                 $randomKeys[] = $easyX[$randomKey];
 
@@ -155,7 +155,7 @@ class ExamController extends Controller
             while ($normalY > 0) {
                 $randomKey = array_rand($normalX);
                 while (in_array($randomKey, $randomKeys)) {
-                    $randomKey = array_rand($normalX);
+                    $normalX[$randomKey] = array_rand($normalX);
                 }
                 $randomKeys[] = $normalX[$randomKey];
 
@@ -170,7 +170,7 @@ class ExamController extends Controller
             while ($hardY > 0) {
                 $randomKey = array_rand($hardX);
                 while (in_array($randomKey, $randomKeys)) {
-                    $randomKey = array_rand($hardX);
+                    $hardX[$randomKey] = array_rand($hardX);
                 }
                 $randomKeys[] = $hardX[$randomKey];
 
@@ -207,7 +207,7 @@ class ExamController extends Controller
             $status = -2;
             return view('doExam.prepare', compact('exam', 'status'));
         }
-        // Nếu đã làm bài 
+        // Nếu đã làm bài
         $user = Auth::user();
         $test_exist = StudentTest::where('student_id', $user->id)->get();
         $check = false;
