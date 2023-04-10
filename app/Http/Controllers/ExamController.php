@@ -124,10 +124,11 @@ class ExamController extends Controller
             $test = Test::firstOrCreate([
                 'exam_id' => $exam->id,
                 'slug' => $exam->id . "-" . $i
-            ], [
-                    'exam_id' => $exam->id,
-                    'slug' => $exam->id . "-" . $i
-                ]);
+            ], 
+            [
+                'exam_id' => $exam->id,
+                'slug' => $exam->id . "-" . $i
+            ]);
 
             $easyX = $easy;
             $normalX = $normal;
@@ -139,8 +140,8 @@ class ExamController extends Controller
 
             while ($easyY > 0) {
                 $randomKey = array_rand($easyX);
-                while (in_array($randomKey, $randomKeys)) {
-                    $easyX[$randomKey] = array_rand($easyX);
+                while (in_array($easyX[$randomKey], $randomKeys)) {
+                    $randomKey = array_rand($easyX);
                 }
                 $randomKeys[] = $easyX[$randomKey];
 
@@ -154,8 +155,8 @@ class ExamController extends Controller
 
             while ($normalY > 0) {
                 $randomKey = array_rand($normalX);
-                while (in_array($randomKey, $randomKeys)) {
-                    $normalX[$randomKey] = array_rand($normalX);
+                while (in_array($normalX[$randomKey], $randomKeys)) {
+                    $randomKey = array_rand($normalX);
                 }
                 $randomKeys[] = $normalX[$randomKey];
 
@@ -169,8 +170,8 @@ class ExamController extends Controller
 
             while ($hardY > 0) {
                 $randomKey = array_rand($hardX);
-                while (in_array($randomKey, $randomKeys)) {
-                    $hardX[$randomKey] = array_rand($hardX);
+                while (in_array($hardX[$randomKey], $randomKeys)) {
+                    $randomKey = array_rand($hardX);
                 }
                 $randomKeys[] = $hardX[$randomKey];
 
@@ -186,10 +187,12 @@ class ExamController extends Controller
 
         return redirect()->route('home')->with(['status' => 'Tạo kì thi thành công!', 'type' => 'success']);
     }
+
     public function codeExam()
     {
         return view('doExam.insertCode');
     }
+
     public function doExam(Request $request)
     {
         $request->validate([
