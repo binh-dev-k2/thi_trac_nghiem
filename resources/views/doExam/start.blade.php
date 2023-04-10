@@ -54,6 +54,7 @@
                         <div class="edit-profile">
                             <form class="card card-default card-md mb-4" id="form_data">
                                 @csrf
+                               
                                 <div class="card-header text-center">
                                     <div class="col-6 ">
                                         <h4>Kì thi: {{ $test_exist->test->exam->name }}</h4>

@@ -263,6 +263,7 @@ class ExamController extends Controller
         $now = Carbon::now();
         $start_time = Carbon::parse($exam->start_time);
         $stop_time = Carbon::parse($exam->stop_time);
+        // Nếu quá giờ làm bài
         if (!$now->between($start_time, $stop_time)) {
             if ($now->greaterThan($stop_time)) {
                 $status = 1;
@@ -297,13 +298,13 @@ class ExamController extends Controller
             ]);
             $i = rand(0, count($exam->test) - 1);
             $test = $exam->test[$i];
-            $result = StudentTest::create([
+            $test_exist = StudentTest::create([
                 'student_id' => $user->id,
                 'test_id' => $test->id,
                 'scores' => -1,
             ]);
-            if ($result) {
-                $time = $test_exist->test->exam->time * 60 - Carbon::now()->diffInSeconds($test_exist->created_at); // Tính thời gian làm bài còn lại
+            if ($test_exist) {
+                $time = $exam->time*60; // Tính thời gian làm bài còn lại
                 return view('doExam.start', compact('test_exist', 'time'));
             }
         }
