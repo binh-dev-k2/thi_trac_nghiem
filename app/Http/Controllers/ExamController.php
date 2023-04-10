@@ -181,7 +181,6 @@ class ExamController extends Controller
 
                 $hardY--;
             }
-
             $randomKeys = [];
         }
 
@@ -197,27 +196,96 @@ class ExamController extends Controller
             'code_exam' => 'required'
         ]);
         $exam = Exam::where('id', $request->code_exam)->first();
+        $now = Carbon::now();
+        $start_time = Carbon::parse($exam->start_time);
+        $stop_time = Carbon::parse($exam->stop_time);
         if ($exam == null) {
             return redirect()->back()->withErrors(['not_found' => "Không tìm thấy bài thi"]);
         }
-        return view('doExam.prepare', compact('exam'));
+        // Nếu bài thi đã đạt số lượng giới hạn
+        if($exam->count_participanted >= $exam->count_participants) {
+            $status = -2;
+            return view('doExam.prepare', compact('exam', 'status'));
+        }
+        // Nếu đã làm bài 
+        $user = Auth::user();
+        $test_exist = StudentTest::where('student_id', $user->id)->get();
+        $check = false;
+        foreach ($test_exist as $key => $value) {
+            if ($value->test->exam->id == $exam->id) {
+                $test_exist = $value;
+                $check = true;
+            }
+        }
+
+        if ($check) {
+            if ($test_exist->scores != -1) { // Nếu bài thi đã được nộp
+
+                return redirect()->route('exam.done', $test_exist->id);
+            } else {
+                // Kiểm tra xem còn thời gian làm không
+                if ($now->between($start_time, $stop_time)) {
+                    $status = 0;
+                    return view('doExam.prepare', compact('exam', 'status'));
+                } else {
+                    // Nếu quá hạn làm bài hoặc chưa đến giờ làm bài
+                   StudentTest::where('id', $test_exist->id)->update([
+                    'scores' => 0
+                   ]);
+                   return redirect()->route('exam.done', $test_exist->id);
+                }
+
+            }
+        }
+        // Kiểm tra bài thi còn hạn làm không ?
+        if ($now->between($start_time, $stop_time)) {
+            $status = 0;
+            return view('doExam.prepare', compact('exam', 'status'));
+        } else {
+            // Nếu quá hạn làm bài hoặc chưa đến giờ làm bài
+            if ($now->greaterThan($stop_time)) {
+                $status = 1;
+                return view('doExam.prepare', compact('exam', 'status'));
+            } else {
+                $status = -1;
+                return view('doExam.prepare', compact('exam', 'status'));
+            }
+        }
+
     }
     public function startExam(Store $session, $id)
     {
+        $exam = Exam::where('id', $id)->first();
+        // Nếu không có exam
+        if ($exam == null) {
+            return abort(404, 'Không tìm thấy trang')->view('errors.404');
+        }
+        $now = Carbon::now();
+        $start_time = Carbon::parse($exam->start_time);
+        $stop_time = Carbon::parse($exam->stop_time);
+        if (!$now->between($start_time, $stop_time)) {
+            if ($now->greaterThan($stop_time)) {
+                $status = 1;
+                return view('doExam.prepare', compact('exam', 'status'));
+            } else {
+                $status = -1;
+                return view('doExam.prepare', compact('exam', 'status'));
+            }
+        }
         $user = Auth::user();
         $test_exist = StudentTest::where('student_id', $user->id)->get();
+
         // Kiểm tra xem đã làm bài thi đó chưa
         $check = false;
         foreach ($test_exist as $key => $value) {
-           if($value->test->exam->id == $id) {
-            $test_exist = $value;
-            $check = true;
-           }
+            if ($value->test->exam->id == $id) {
+                $test_exist = $value;
+                $check = true;
+            }
         }
         if ($check) {
             $time = $test_exist->test->exam->time * 60 - Carbon::now()->diffInSeconds($test_exist->created_at); // Tính thời gian làm bài còn lại
-            if($time < 0|| $test_exist->scores != -1) {
-                
+            if ($time < 0 || $test_exist->scores != -1) {
                 return redirect()->route('exam.done', $test_exist->id);
             }
             return view('doExam.start', compact('test_exist', 'time'));
@@ -225,7 +293,7 @@ class ExamController extends Controller
         } else {
             $exam = Exam::where('id', $id)->first();
             Exam::where('id', $id)->update([
-                'count_participanted' => $exam->count_participanted+=1
+                'count_participanted' => $exam->count_participanted += 1
             ]);
             $i = rand(0, count($exam->test) - 1);
             $test = $exam->test[$i];
@@ -244,14 +312,18 @@ class ExamController extends Controller
     }
 
     public function done($id)
-    { 
+    {
         $student_test = StudentTest::where('id', $id)->first();
+        if ($student_test == null) {
+            return abort(404, 'Không tìm thấy trang')->view('errors.404');
+        }
         return view('doExam.done', compact('student_test'));
     }
-    
+
     public function show(string $id)
     {
-        //
+        $exam = Exam::where('id', $id)->first();
+        return view('listexam.show', compact('exam'));
     }
 
     /**

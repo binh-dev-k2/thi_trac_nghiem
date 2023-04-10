@@ -65,7 +65,7 @@
                             <td>
                               <div class="d-flex">
                                 <div class="userDatatable-inline-title">
-                                  <a href="#" class="text-dark fw-500">
+                                  <a href="{{ route('exam.show', $item->id) }}" class="text-dark fw-500">
                                     <h6>{{ $item->name }}</h6>
                                   </a>
                                 </div>
@@ -100,7 +100,7 @@
                             <td>
                               <ul class="orderDatatable_actions mb-0 d-flex flex-wrap">
                                 <li>
-                                  <a href="#" class="view">
+                                  <a href="{{ route('exam.show', $item->id) }}" class="view">
                                     <i class="uil uil-eye"></i>
                                   </a>
                                 </li>

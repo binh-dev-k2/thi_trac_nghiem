@@ -73,9 +73,19 @@
                                                 $choose_answer = $value->answer_id;
                                             }
                                         }
+                                         // Tính điểm câu hỏi  
+                                         $matrix = json_decode($test_exist->test->exam->matrix);
+                                        $diem = 0;
+                                                if ($question->question->level == 1) {
+                                                    $diem = $matrix->diem_de;
+                                                } elseif ($question->question->level == 2) {
+                                                    $diem =  $matrix->diem_tb;
+                                                } else {
+                                                    $diem =  $matrix->diem_kho;
+                                                }
                                     @endphp
                                         <div class="">
-                                            <h5 class="no-select">Câu {{ $key + 1 }}:
+                                            <h5 class="no-select">Câu {{ $key + 1 }}({{ $diem." điểm" }}):
                                                 {{ $question->question->name }}</h5>
                                             <div class="radio-vertical-list">
                                                 @foreach ($question->question->answer as $answer)
