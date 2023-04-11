@@ -116,9 +116,21 @@
                                                     <div class="col-sm-2 d-flex aling-items-center">
                                                         <label for="so_luong" class=" col-form-label color-dark fs-14 fw-500 align-center">Số lượng đề thi</label>
                                                     </div>
+                                                    @php
+                                                            $max = 1;
+                                                            if ($easy > 0) {
+                                                                $max *= $easy;
+                                                            }
+                                                            if ($normal > 0) {
+                                                                $max *= $normal;
+                                                            }
+                                                            if ($hard > 0) {
+                                                                $max *= $hard;
+                                                            }
+                                                        @endphp
                                                     <div class="col-sm-10">
                                                         <input min="0" type="number" class="form-control ih-medium ip-gray radius-xs b-light px-15"
-                                                            name="so_luong" max="100" required id="so_luong"
+                                                            name="so_luong" max="{{ $max }}" required id="so_luong"
                                                             placeholder="Số lượng đề">
                                                     </div>
                                                 </div>

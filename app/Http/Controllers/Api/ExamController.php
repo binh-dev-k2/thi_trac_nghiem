@@ -40,7 +40,7 @@ class ExamController extends Controller
             foreach ($test->testQuestion as $question) {
                 $dapAn_id = $request->get($question->question_id); // Lấy ra đáp án người dùng chọn
                 foreach ($question->question->answer as $answer) {
-                   
+
                     if ($answer->id == $dapAn_id) {
                         if ($answer->status == 1) {
                             if($question->question->level == 1) {
@@ -88,6 +88,7 @@ class ExamController extends Controller
 
         return response()->json(['type' => 'success', 'redirect' => route('exam.create.3', $id)], 200);
     }
+
     public function getTime($id)
     {
         $test_exist = StudentTest::where('id', $id)->first();
@@ -97,21 +98,22 @@ class ExamController extends Controller
         }
         return response()->json(['time' => $time]);
     }
+
     public function storeAnswer(Request $request)
     {
-       
+
         $Answer = AnswerStudentTest::where('student_test_id', $request->student_test_id)->where('question_id',$request->question_id )->first();
-        
+
         $result = false;
         if(isset($Answer->id)) {
             $result= AnswerStudentTest::where('id', $Answer->id)->update([
-                'answer_id' =>$request->answer_id 
+                'answer_id' =>$request->answer_id
             ]);
         }else {
             $result = AnswerStudentTest::create([
                 'student_test_id'=> $request->student_test_id,
                 'question_id'=>$request->question_id ,
-                'answer_id' =>$request->answer_id 
+                'answer_id' =>$request->answer_id
             ]);
         }
         if($result) {
@@ -120,14 +122,31 @@ class ExamController extends Controller
             return response()->json(['type' => 'danger']);
         }
     }
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
 
+
+    public function update2(Request $request, $id)
+    {
+        $data = json_decode($request->getContent(), true);
+        Question::where('exam_id', $id)->delete();
+
+        foreach ($data as $ques) {
+            $question = Question::create([
+                'exam_id' => $id,
+                'name' => $ques['question'],
+                'level' => $ques['type']
+            ]);
+
+            foreach ($ques['answers'] as $key => $answer) {
+                Answer::create([
+                    'question_id' => $question->id,
+                    'content' => $answer,
+                    'status' => $key + 1 == $ques['correct-answer'] ? true : false
+                ]);
+            }
+        }
+
+        return response()->json(['type' => 'success', 'redirect' => route('exam.edit.3', $id)], 200);
+    }
     /**
      * Update the specified resource in storage.
      */

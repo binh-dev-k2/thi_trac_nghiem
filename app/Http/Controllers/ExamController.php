@@ -124,7 +124,7 @@ class ExamController extends Controller
             $test = Test::firstOrCreate([
                 'exam_id' => $exam->id,
                 'slug' => $exam->id . "-" . $i
-            ], 
+            ],
             [
                 'exam_id' => $exam->id,
                 'slug' => $exam->id . "-" . $i
@@ -333,17 +333,66 @@ class ExamController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit1(string $id)
     {
-        //
+        $exam = Exam::where('id', $id)->first();
+        return view('exam.edit', compact('exam'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update1(Request $request, string $id)
     {
-        //
+        $validator = $request->validate([
+            'name' => 'required',
+            'count_participants' => 'required',
+            'datetimes' => 'required',
+            'time' => 'required',
+        ]);
+
+        $exam = Exam::find($id);
+
+        if ($exam == null) {
+            return abort(404, 'Không tìm thấy trang')->view('errors.404');
+        }
+
+        $request->datetimes = explode(" - ", $request->datetimes);
+        $start_time = $request->datetimes[0];
+        $stop_time = $request->datetimes[1];
+
+        $exam->update([
+            'user_id' => auth()->user()->id,
+            'time' => $request->time,
+            'name' => $request->name,
+            'count_participants' => $request->count_participants,
+            'start_time' => $start_time,
+            'stop_time' => $stop_time,
+        ]);
+
+        return redirect()->route('exam.edit.2', ['id' => $exam->id]);
+    }
+
+    public function edit2(string $id)
+    {
+        $question = Question::where('exam_id', $id)->get();
+        return view('exam.edit2', compact('id', 'question'))->with(['status' => 'Sửa thông tin kì thi thành công!', 'type' => 'success']);
+    }
+
+    public function edit3($id)
+    {
+        $exam = Exam::find($id);
+        $easy = 0;
+        $normal = 0;
+        $hard = 0;
+
+        foreach ($exam->question as $item) {
+            $item->level == 1 ? $easy++ : $easy;
+            $item->level == 2 ? $normal++ : $normal;
+            $item->level == 3 ? $hard++ : $hard;
+        }
+
+        return view('exam.edit3', compact('exam', 'easy', 'normal', 'hard'))->with(['status' => 'Tạo bài thi thành công!', 'type' => 'success']);
     }
 
     /**
@@ -351,6 +400,8 @@ class ExamController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Exam::destroy($id);
+
+        return redirect()->route('exam.list')->with(['status' => 'Xóa kì thi thành công!', 'type' => 'success']);
     }
 }
