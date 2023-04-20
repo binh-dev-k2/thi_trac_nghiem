@@ -21,7 +21,8 @@ class ExamController extends Controller
      */
     public function index()
     {
-        $exam = Exam::all();
+        $user = Auth::user();
+        $exam = Exam::where('user_id', $user->id)->get();
         return view('listexam.index', compact('exam'));
     }
 
@@ -199,7 +200,9 @@ class ExamController extends Controller
             'code_exam' => 'required'
         ]);
         $exam = Exam::where('id', $request->code_exam)->first();
+        Carbon::setLocale('vi');
         $now = Carbon::now();
+        
         $start_time = Carbon::parse($exam->start_time);
         $stop_time = Carbon::parse($exam->stop_time);
         if ($exam == null) {
@@ -263,6 +266,7 @@ class ExamController extends Controller
         if ($exam == null) {
             return abort(404, 'Không tìm thấy trang')->view('errors.404');
         }
+        Carbon::setLocale('vi');
         $now = Carbon::now();
         $start_time = Carbon::parse($exam->start_time);
         $stop_time = Carbon::parse($exam->stop_time);

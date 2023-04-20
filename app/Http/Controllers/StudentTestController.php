@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\StudentTest;
-
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 class StudentTestController extends Controller
 {
     /**
@@ -12,7 +13,9 @@ class StudentTestController extends Controller
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+        $exam = StudentTest::where('student_id', $user->id)->get();
+        return view('studenttest.index', compact('exam'));
     }
 
     /**

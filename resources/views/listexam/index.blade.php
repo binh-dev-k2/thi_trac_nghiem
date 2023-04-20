@@ -10,19 +10,6 @@
                                 <div class="table-responsive">
                                     <div class="adv-table-table__header">
                                         <h4>Danh sách bài thi đã tạo</h4>
-                                        <div class="adv-table-table__button">
-                                            <div class="dropdown">
-                                                <a class="btn btn-primary dropdown-toggle dm-select" href="#" role="button" id="dropdownMenuLink"
-                                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    Export
-                                                </a>
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                                    <a class="dropdown-item" href="#">copy</a>
-                                                    <a class="dropdown-item" href="#">csv</a>
-                                                    <a class="dropdown-item" href="#">print</a>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                     <div id="filter-form-container"></div>
                                     <table class="table mb-0 table-borderless adv-table" data-sorting="true" data-filter-container="#filter-form-container"

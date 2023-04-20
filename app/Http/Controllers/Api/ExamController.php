@@ -92,6 +92,7 @@ class ExamController extends Controller
     public function getTime($id)
     {
         $test_exist = StudentTest::where('id', $id)->first();
+        Carbon::setLocale('vi');
         $time = $test_exist->test->exam->time * 60 - Carbon::now()->diffInSeconds($test_exist->created_at); // Tính thời gian làm bài còn lại
         if($test_exist->scores != -1) {
             return response()->json(['type' => 'danger'],400);
