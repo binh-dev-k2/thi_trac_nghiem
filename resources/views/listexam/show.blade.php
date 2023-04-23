@@ -59,7 +59,7 @@
                                                         <td>
                                                             <div class="d-flex">
                                                                 <div class="userDatatable-inline-title">
-                                                                    <a href="{{ route('studentTest.show', $item->id) }}" class="text-dark fw-500">
+                                                                    <a href="{{ route('test.show', $item->id) }}" class="text-dark fw-500">
                                                                         <h6>{{ $item->student->name }}</h6>
                                                                     </a>
                                                                 </div>

@@ -47,7 +47,7 @@ Route::middleware(['auth','verified'])->namespace('App\Http\Controllers')->group
         Route::get('/sua-b3/{id}', [ExamController::class, 'edit3'])->name('exam.edit.3');
         Route::post('/sua-b3/{id}', [ExamController::class, 'update3'])->name('exam.update.3');
 
-        Route::get('/xem-bai-thi/{id}', [StudentTestController::class, 'show'])->name('exam.show');
+        Route::get('/xem-bai-thi/{id}', [StudentTestController::class, 'show'])->name('test.show');
 
         Route::delete('/xoa/{id}', [ExamController::class, 'destroy'])->name('exam.delete');
     });

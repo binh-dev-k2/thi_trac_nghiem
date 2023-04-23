@@ -40,7 +40,7 @@
                                                     <td>
                                                         <div class="d-flex">
                                                             <div class="userDatatable-inline-title">
-                                                                <a href="{{ route('exam.show', $item->id) }}"
+                                                                <a href="{{ route('studentTest.show', $item->id) }}"
                                                                     class="text-dark fw-500">
                                                                     <h6>{{ $item->test->exam->name }}</h6>
                                                                 </a>
